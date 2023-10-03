@@ -3,3 +3,7 @@ nomad:
   hosts:
     nomad-01:
       ansible_host: 192.168.64.102
+    nomad-02:
+      ansible_host: 192.168.64.103
+    nomad-03:
+      ansible_host: 192.168.64.104

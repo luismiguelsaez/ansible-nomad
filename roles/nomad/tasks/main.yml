@@ -1,5 +1,27 @@
 ---
 
+- name: Install Docker for Debian OS family
+  block:
+    - name: Add Docker repository gpg key
+      ansible.builtin.apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+        validate_certs: True
+    - name: Add Docker package repository
+      ansible.builtin.apt_repository:
+        repo: "deb https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+        state: present
+        filename: docker
+        update_cache: True
+        validate_certs: True
+    - name: Install Docker package
+      ansible.builtin.package:
+        name: docker-ce
+        state: present
+        update_cache: True
+  when: ansible_os_family == 'Debian'
+  become: True
+
 - name: Install Nomad for Debian OS family
   block:
     - name: Add Nomad repository gpg key
@@ -7,28 +29,28 @@
         url: https://apt.releases.hashicorp.com/gpg
         state: present
         validate_certs: True
-
     - name: Add Nomad package repository
       ansible.builtin.apt_repository:
         repo: "deb https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main"
         state: present
-        filename: hashicorp.list
+        filename: hashicorp
         update_cache: True
         validate_certs: True
-
     - name: Install Nomad package
       ansible.builtin.package:
         name: nomad
         state: present
         update_cache: True
-
   when: ansible_os_family == 'Debian'
   become: True
 
-- name: Configure Systemd service
+- name: Configure Systemd services
   block:
-    - name: Enable Nomad service
+    - name: Enable services
       ansible.builtin.service:
-        name: nomad
+        name: "{{ item }}"
         enabled: True
         state: started
+      with_items:
+        - nomad
+        - docker
