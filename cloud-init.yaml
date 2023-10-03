@@ -1,0 +1,6 @@
+users:
+  - default
+  - name: ubuntu
+    sudo:  ALL=(ALL) NOPASSWD:ALL
+    ssh_authorized_keys:
+      - ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBD7hhktAQwkkGONLAQV5mu80u95yZ//s09aHopc/Qq20VfU4T6Uh5XImScXQaXmR0B6kOEYpPsxWmZeTrlbgWok=

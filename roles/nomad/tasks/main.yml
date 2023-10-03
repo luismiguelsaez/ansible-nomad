@@ -1,0 +1,34 @@
+---
+
+- name: Install Nomad for Debian OS family
+  block:
+    - name: Add Nomad repository gpg key
+      ansible.builtin.apt_key:
+        url: https://apt.releases.hashicorp.com/gpg
+        state: present
+        validate_certs: True
+
+    - name: Add Nomad package repository
+      ansible.builtin.apt_repository:
+        repo: "deb https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main"
+        state: present
+        filename: hashicorp.list
+        update_cache: True
+        validate_certs: True
+
+    - name: Install Nomad package
+      ansible.builtin.package:
+        name: nomad
+        state: present
+        update_cache: True
+
+  when: ansible_os_family == 'Debian'
+  become: True
+
+- name: Configure Systemd service
+  block:
+    - name: Enable Nomad service
+      ansible.builtin.service:
+        name: nomad
+        enabled: True
+        state: started

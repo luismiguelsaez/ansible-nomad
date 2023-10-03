@@ -1,0 +1,5 @@
+- name: Nomad cluster configuration
+  hosts: nomad
+  become: yes
+  roles:
+    - nomad
